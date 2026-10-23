@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#171126">
+<title>Halloween Cool Location</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#171126}
+body{touch-action:manipulation}
+#app{position:fixed;inset:0;background:linear-gradient(180deg,#171126 0%,#27143c 100%);overflow:hidden;color:#fff}
+.top{position:absolute;z-index:4;top:max(10px,env(safe-area-inset-top));left:12px;right:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{background:rgba(255,255,255,.96);color:#0a58c7;border-radius:15px;padding:9px 12px;font-weight:900;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.brand small{display:block;font-size:9px;letter-spacing:1.4px;color:#24324b;margin-top:2px}
+.score{background:rgba(10,8,20,.82);border:1px solid rgba(255,255,255,.12);border-radius:15px;padding:8px 12px;text-align:center;min-width:72px;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.score b{display:block;font-size:21px;line-height:1}.score span{font-size:9px;opacity:.72;text-transform:uppercase;letter-spacing:1px}
+.title{position:absolute;z-index:3;top:max(82px,calc(env(safe-area-inset-top) + 82px));left:14px;right:14px;text-align:center}
+.title h1{font-size:24px;margin:0 0 5px;font-weight:1000}.title p{font-size:13px;margin:0;color:rgba(255,255,255,.76);font-weight:700}
+.progress-wrap{position:absolute;z-index:3;top:max(136px,calc(env(safe-area-inset-top) + 136px));left:18px;right:18px;height:8px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
+.progress{height:100%;width:0%;background:#f8e7a1;transition:width .25s ease}
+.moon{position:absolute;right:7%;top:18%;width:86px;height:86px;border-radius:50%;background:#f8e7a1;box-shadow:0 0 28px rgba(248,231,161,.18)}
+.bat{position:absolute;font-size:22px;opacity:.58;pointer-events:none}.b1{left:8%;top:22%}.b2{left:25%;top:30%;font-size:18px}.b3{right:27%;top:28%}
+.hill{position:absolute;left:-12%;right:-12%;bottom:-65px;height:190px;background:#0d151d;border-radius:50% 50% 0 0}
+.pumpkin{position:absolute;z-index:2;bottom:26px;font-size:35px;pointer-events:none}.p1{left:8%}.p2{left:26%;bottom:18px;font-size:28px}.p3{right:13%}
+#ghost{position:absolute;z-index:5;border:0;background:transparent;padding:4px;width:76px;height:76px;font-size:58px;line-height:1;cursor:pointer;touch-action:manipulation;transition:left .22s ease,top .22s ease,width .2s ease,height .2s ease,font-size .2s ease,transform .12s ease}
+#ghost:active{transform:scale(.8)}
+#hint{position:absolute;z-index:4;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%);background:rgba(10,8,20,.82);border:1px solid rgba(255,255,255,.1);padding:10px 14px;border-radius:999px;white-space:nowrap;font-size:13px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.win{position:absolute;z-index:10;inset:16px;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(12,8,22,.93);border-radius:24px;padding:22px}.winbox{width:min(360px,100%)}
+.win h2{font-size:34px;margin:4px 0 8px}.reward{background:#fff;color:#182033;border-radius:18px;padding:16px;margin-top:16px}.reward small{display:block;color:#6a7488;text-transform:uppercase;font-size:10px;font-weight:900;letter-spacing:1px}.reward strong{display:block;font-size:20px;margin-top:5px}.reward p{margin:7px 0 0;color:#606b7e;font-size:13px;line-height:1.35}
+button.replay{margin-top:14px;width:100%;border:0;border-radius:15px;padding:14px;background:#0c63ff;color:#fff;font-size:16px;font-weight:900}.hidden{display:none!important}
+.spark{position:absolute;z-index:8;width:8px;height:8px;border-radius:50%;background:#ffd66b;pointer-events:none;animation:spark .7s ease forwards}@keyframes spark{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}
+@media (max-width:360px){.brand{font-size:13px;padding:8px 10px}.score{min-width:64px;padding:7px 10px}.title h1{font-size:21px}.title p{font-size:12px}}
+@media (prefers-reduced-motion:reduce){#ghost{transition:none}.spark{animation:none}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top"><div class="brand">COOL LOCATION<small>HALLOWEEN</small></div><div class="score"><b id="score">0 / 5</b><span>Fantômes</span></div></div>
+  <div class="title"><h1>👻 Attrape le fantôme !</h1><p>Touche-le 5 fois. Il devient un peu plus rapide…</p></div>
+  <div class="progress-wrap"><div id="progress" class="progress"></div></div>
+  <div class="moon"></div><div class="bat b1">🦇</div><div class="bat b2">🦇</div><div class="bat b3">🦇</div>
+  <div class="hill"></div><div class="pumpkin p1">🎃</div><div class="pumpkin p2">🎃</div><div class="pumpkin p3">🎃</div>
+  <button id="ghost" aria-label="Toucher le fantôme">👻</button>
+  <div id="hint">Trouve le fantôme et touche-le 👆</div>
+  <div id="win" class="win hidden"><div class="winbox"><div style="font-size:60px">🎃🎉</div><h2>BRAVO !</h2><div>Tu as attrapé les 5 fantômes !</div><div class="reward"><small>Tu as gagné</small><strong>🎁 Une récompense Halloween</strong><p>Montre cet écran à l'équipe Cool Location pour récupérer ton cadeau.</p></div><button id="replay" class="replay">REJOUER</button></div></div>
+</div>
+<script>
+(()=>{
+const app=document.getElementById('app'),ghost=document.getElementById('ghost'),scoreEl=document.getElementById('score'),progress=document.getElementById('progress'),hint=document.getElementById('hint'),win=document.getElementById('win'),replay=document.getElementById('replay');
+let score=0,moveTimer=null,lastIndex=-1;
+const positions=[[8,24],[33,21],[60,23],[74,34],[14,41],[42,38],[67,47],[10,58],[35,56],[69,61],[23,70],[50,68],[72,73]];
+function delay(){if(score<2)return 1700;if(score<4)return 1100;return 760}
+function ghostSize(){let size=58,box=76;if(score>=2){size=52;box=70}if(score>=4){size=46;box=64}ghost.style.fontSize=size+'px';ghost.style.width=box+'px';ghost.style.height=box+'px'}
+function moveGhost(){if(score>=5)return;let i;do{i=Math.floor(Math.random()*positions.length)}while(i===lastIndex);lastIndex=i;ghost.style.left=positions[i][0]+'%';ghost.style.top=positions[i][1]+'%';clearTimeout(moveTimer);moveTimer=setTimeout(moveGhost,delay())}
+function sparks(){const ar=app.getBoundingClientRect(),gr=ghost.getBoundingClientRect(),cx=gr.left-ar.left+gr.width/2,cy=gr.top-ar.top+gr.height/2;for(let i=0;i<12;i++){const s=document.createElement('span');s.className='spark';const a=Math.PI*2*i/12,d=34+Math.random()*34;s.style.left=cx+'px';s.style.top=cy+'px';s.style.setProperty('--dx',Math.cos(a)*d+'px');s.style.setProperty('--dy',Math.sin(a)*d+'px');app.appendChild(s);setTimeout(()=>s.remove(),750)}}
+function updateText(){scoreEl.textContent=score+' / 5';progress.style.width=(score/5*100)+'%';if(score===1)hint.textContent='Bien joué ! Encore 4 👻';if(score===2)hint.textContent='Il accélère un peu 😈';if(score===3)hint.textContent='Plus que 2 🎃';if(score===4)hint.textContent='Dernier fantôme 👀'}
+function resetGame(){clearTimeout(moveTimer);score=0;lastIndex=-1;scoreEl.textContent='0 / 5';progress.style.width='0%';hint.textContent='Trouve le fantôme et touche-le 👆';ghost.classList.remove('hidden');win.classList.add('hidden');ghostSize();moveGhost()}
+ghost.addEventListener('click',()=>{if(score>=5)return;score++;sparks();ghostSize();updateText();if(score>=5){clearTimeout(moveTimer);ghost.classList.add('hidden');hint.textContent='🎉 Gagné !';setTimeout(()=>win.classList.remove('hidden'),220)}else moveGhost()});
+replay.addEventListener('click',resetGame);resetGame();
+})();
+</script>
+</body>
+</html>
